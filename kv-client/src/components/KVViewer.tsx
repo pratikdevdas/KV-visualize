@@ -14,7 +14,9 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
 
   const { allKeysQuery, useGetValueQuery, deleteMutation } = useKVQueries(binding);
   const valueQuery = useGetValueQuery(selectedKey);
-
+  console.log(valueQuery.data, 'valueQuery.data');
+  console.log(allKeysQuery.error, 'allKeysQuery.error');  
+  
   const handleKeyClick = (key: string) => {
     setSearchKey(key);
     setSelectedKey(key);
@@ -54,6 +56,16 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
       console.error('Failed to copy:', err);
     }
   };
+
+  const tryParseJSON = (value: string) => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  };
+
+  const displayValue = valueQuery.data?.value ? tryParseJSON(valueQuery.data.value) : null;
 
   return (
     <div className="bg-white p-8 rounded-xl shadow-lg mx-auto">
@@ -164,8 +176,12 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
                   </button>
                 </div>
                 <div className="relative">
-                  <pre className="bg-white p-4 rounded-lg border border-gray-200 overflow-y-auto overflow-x-hidden text-gray-800 font-mono text-sm h-[400px] whitespace-pre-wrap">
-                    {valueQuery.data.value}
+                  <pre className="bg-white p-4 rounded-lg border border-gray-200 overflow-y-auto text-gray-800 font-mono text-sm h-[400px] whitespace-pre">
+                    <code>
+                      {typeof displayValue === 'string' 
+                        ? displayValue 
+                        : JSON.stringify(displayValue, null, 2)}
+                    </code>
                   </pre>
                 </div>
               </div>

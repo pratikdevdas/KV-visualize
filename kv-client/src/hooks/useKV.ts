@@ -10,6 +10,8 @@ export const useKVQueries = (binding: string) => {
     queryKey: ['kv-keys', binding],
     queryFn: () => kvService.getAllValues(binding),
     refetchOnWindowFocus: true,
+    staleTime: 1000,
+    refetchOnMount: true,
   });
 
   // Query for fetching a single value

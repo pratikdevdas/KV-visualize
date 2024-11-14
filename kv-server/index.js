@@ -54,7 +54,7 @@ app.get("/kv/:key", async (req, res) => {
   const command = `wrangler kv key get --binding=${binding} --local "${key}" --persist-to ${persistPath}`;
   try {
     const result = await runWranglerCommand(command);
-    res.json({ key, value: result.trim() });
+    res.json({ key, value : result.trim() });
   } catch (error) {
     res.status(500).json({ error });
   }

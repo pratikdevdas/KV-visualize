@@ -9,7 +9,6 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60, // Consider data stale after 1 minute
-      retry: 1, // Only retry failed requests once
     },
   },
 });
