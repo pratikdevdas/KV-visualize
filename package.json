@@ -1,0 +1,18 @@
+{
+  "name": "kv-visualize",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run start:server && npm run start:client",
+    "start:server": "cd kv-server && npm run dev --port 3000",
+    "start:client": "cd kv-client && npm run start",
+    "install": "npm run install:server && npm run install:client",
+    "install:server": "cd kv-server && npm install",
+    "install:client": "cd kv-client && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
