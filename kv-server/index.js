@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json());
 
 // Default values
-const DEFAULT_KV_BINDING = "USER_PROFILE_INTERACTICO";
+const DEFAULT_KV_BINDING = "TEST_PROFILE";
 const KV_PERSIST_PATH = "~/Desktop/wrangler-data";
 
 // Function to run wrangler CLI commands
