@@ -10,7 +10,7 @@ This project allows you to manage your LOCAL(create, delete, edit) your multiple
    - If a `preview_id` exists, remove it. 
    - Note: This setup works only locally, so your KV might be empty at first, and there is no remote connection.
 3. **Create a Directory**: 
-   - Create a folder on your Desktop and name it `wrangler-data`.
+   - Create a folder on your Desktop and name it `wrangler-data`. You may need to workaround this step. Check index.js of server.
 4. **Install Packages**: 
    - Run the npm script to install packages in both directories.
    - Then, execute `npm start` to launch the project.
