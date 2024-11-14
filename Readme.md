@@ -1,6 +1,6 @@
 # Cloudflare KV Manager
 
-This project allows you to manage (create, delete, edit) your multiple Cloudflare KV stores locally.
+This project allows you to manage your LOCAL(create, delete, edit) your multiple Cloudflare KV stores locally.
 
 ## Steps to Get Started
 
