@@ -4,7 +4,7 @@ This project allows you to manage your LOCAL(create, delete, edit) your multiple
 
 ## Steps to Get Started
 
-1. **Install Node.js**: Ensure you have Node.js installed on your machine.
+1. **Install Node.js and Wrangler**: Ensure you have Node.js and Wrangler installed on your machine.
 2. **Configure KV Namespace**: 
    - Add your local KV namespace to the `wrangler.toml` file. 
    - If a `preview_id` exists, remove it. 
