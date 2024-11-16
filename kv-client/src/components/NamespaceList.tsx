@@ -15,7 +15,7 @@ const NamespaceList = () => {
     fetch('http://localhost:3000/kv-namespaces')
       .then(res => res.json())
       .then(data => setNamespaces(data))
-      .catch(err => setError('Failed to load KV namespaces'));
+      .catch(err => setError('Failed to load KV namespaces. Check your server is running or logs.'));
   }, []);
 
   if (error) return <div className="alert alert-error">{error}</div>;
