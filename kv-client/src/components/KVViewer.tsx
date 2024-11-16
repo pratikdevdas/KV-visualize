@@ -14,6 +14,7 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
 
   const { allKeysQuery, useGetValueQuery, deleteMutation } = useKVQueries(binding);
   const valueQuery = useGetValueQuery(selectedKey);
+  const {data: allKeysData} = allKeysQuery;
   
   const handleKeyClick = (key: string) => {
     setSearchKey(key);
@@ -42,6 +43,7 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
       await deleteMutation.mutateAsync(valueQuery.data.key);
       setSelectedKey('');
       setSearchKey('');
+      setSearchParams({});
     } catch (err) {
       console.error('Failed to delete key:', err);
     }
@@ -65,6 +67,9 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
 
   const displayValue = valueQuery.data?.value ? tryParseJSON(valueQuery.data.value) : null;
 
+  if (allKeysQuery.isLoading) return <div>Loading keys...</div>;
+  if (!allKeysData) return <div className="text-red-500">Failed to load keys</div>;
+
   return (
     <div className="bg-white p-8 rounded-xl shadow-lg mx-auto">
       <h2 className="text-2xl font-bold mb-8 text-gray-800 border-b pb-4">
@@ -81,7 +86,7 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
               <div className="text-red-500">Failed to load keys</div>
             ) : (
               // @ts-ignore
-              allKeysQuery.data?.map((kv: KVPair) => (
+              allKeysData.map((kv: KVPair) => (
                 <button
                   key={kv.name}
                   onClick={() => handleKeyClick(kv.name)}
