@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useKVQueries } from '../hooks/useKV';
 import { KVPair } from '../types/types';
 import { useSearchParams } from 'react-router-dom';
@@ -14,8 +14,6 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
 
   const { allKeysQuery, useGetValueQuery, deleteMutation } = useKVQueries(binding);
   const valueQuery = useGetValueQuery(selectedKey);
-  console.log(valueQuery.data, 'valueQuery.data');
-  console.log(allKeysQuery.error, 'allKeysQuery.error');  
   
   const handleKeyClick = (key: string) => {
     setSearchKey(key);
@@ -24,7 +22,7 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
   };
 
   // Add effect to handle initial query param
-  React.useEffect(() => {
+  useEffect(() => {
     const keyParam = searchParams.get('key');
     if (keyParam) {
       setSearchKey(keyParam);
@@ -39,7 +37,7 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
 
   const handleDelete = async () => {
     if (!valueQuery.data) return;
-    
+    if (deleteMutation.isPending) return;
     try {
       await deleteMutation.mutateAsync(valueQuery.data.key);
       setSelectedKey('');
@@ -140,8 +138,23 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
               Failed to fetch value
             </div>
           )}
-          
-          {valueQuery.data && (
+          {valueQuery.isLoading && (
+            <div className="text-gray-500 mb-8 p-4 bg-gray-50 border border-gray-200 rounded-lg flex items-center gap-3">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              Loading value...
+            </div>
+          )}
+          {valueQuery.data && valueQuery.data.value === 'Value not found' && (
+            <div className="text-red-500 mb-8 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              Value not found
+            </div>
+          )}
+          {valueQuery.data && valueQuery.data.value !== 'Value not found' && (
             <div className="border border-gray-200 rounded-lg p-8 bg-gray-50 shadow-inner">
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
@@ -188,7 +201,8 @@ export const KVViewer: React.FC<KVViewerProps> = ({ binding }) => {
               <div className="flex justify-end">
                 <button
                   onClick={handleDelete}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm"
+                  disabled={deleteMutation.isPending}
+                  className={`bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 font-medium shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm ${deleteMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
