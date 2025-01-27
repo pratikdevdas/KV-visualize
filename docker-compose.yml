@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: ./kv-server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./wrangler-data:/wrangler-data
+      - ./wrangler.toml:/app/wrangler.toml
+    environment:
+      - KV_PERSIST_PATH=/wrangler-data
+
+  client:
+    build:
+      context: ./kv-client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server 
